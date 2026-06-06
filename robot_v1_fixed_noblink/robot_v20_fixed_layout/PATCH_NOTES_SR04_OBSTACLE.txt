@@ -1,0 +1,24 @@
+Bản vá SR04 obstacle:
+
+1) Đã thêm khung CAM BIEN KHOANG CACH SR04 trong tab CONTROL XE / UDP:
+   - Cự ly nhận biết vật cản (cm)
+   - Tốc độ PWM khi né vật cản
+   - Thời gian rẽ phải (ms)
+   - Thời gian đi thẳng (ms)
+   - Nút BẬT/TẮT SR04, GỬI CẤU HÌNH, ĐỌC SR04, TEST NÉ VẬT CẢN
+
+2) Logic phần mềm:
+   - ESP32 gửi khoảng cách về dạng SR04,DIST,<cm> hoặc DIST:<cm>.
+   - Nếu đang NAVIGATING và khoảng cách <= ngưỡng:
+       rẽ phải -> đi thẳng -> reset PID -> tiếp tục bám line/mục tiêu cũ.
+   - Trong lúc né vật cản, PWM bám line tạm thời không chạy để không đè lệnh né.
+
+3) Chân cảm biến theo ảnh:
+   - FRONT_TRIG = GPIO13
+   - FRONT_ECHO = GPIO12
+
+4) Firmware mẫu nằm tại:
+   esp32_firmware_sr04/robot_esp32_sr04_obstacle.ino
+   Firmware hỗ trợ Serial và UDP 8080, lệnh PWM dạng "L,R", PING, STOP, SR04?, OBS,ON/OFF, OBS,CFG...
+
+Lưu ý: nếu bạn đang dùng firmware ESP32 riêng có servo/PCA9685, hãy gộp thêm phần SR04 và các lệnh OBS trong file mẫu vào firmware hiện tại để không mất chức năng servo.

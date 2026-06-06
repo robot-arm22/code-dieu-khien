@@ -1,0 +1,29 @@
+BẢN SỬA: ESP32 dùng chung một kết nối
+
+Các thay đổi chính:
+1. Thêm chế độ kết nối ESP32 UDP dùng chung trong servo_controller.py:
+   - connect_esp32_udp(ip, port)
+   - send_raw() tự gửi qua USB/TCP/UDP tùy kết nối hiện tại
+   - read_reply_nonblocking() đọc phản hồi UDP không làm treo giao diện
+
+2. Sửa tab AUTO > CONTROL:
+   - Bỏ phần Raspberry Pi WiFi thừa khỏi giao diện
+   - Chỉ giữ một khu vực ESP32 WiFi UDP DÙNG CHUNG
+   - Mặc định IP 192.168.1.250, port 8080
+   - Nút CONNECT ESP32 UDP tạo kết nối duy nhất cho toàn bộ phần mềm
+
+3. Sửa tab KHO HÀNG > CONTROL XE / UDP:
+   - Bỏ IP/port ESP32 riêng trong tab điều khiển xe
+   - Không còn tự tạo socket UDP riêng
+   - PING, STOP, PWM thủ công và auto tracking đều gửi qua shared["servo"]
+   - Hiển thị trạng thái kết nối dùng chung, nhắc người dùng vào AUTO > CONTROL nếu chưa kết nối
+
+4. Logic đóng chương trình:
+   - CarControlTab không tự đóng ESP32 nữa vì kết nối dùng chung do main.py/ControlTab quản lý
+   - Khi thoát app, main.py vẫn gọi servo.disconnect() để đóng đúng một kết nối chung
+
+Cách dùng:
+1. Mở phần mềm: ./run_ubuntu.sh
+2. Vào AUTO > CONTROL
+3. Kiểm tra IP/port ESP32, bấm CONNECT ESP32 UDP
+4. Vào KHO HÀNG > CONTROL XE / UDP để dùng PING, STOP, PWM thủ công hoặc camera tracking

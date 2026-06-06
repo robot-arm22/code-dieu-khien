@@ -1,0 +1,7 @@
+customtkinter
+opencv-python
+Pillow
+pyserial
+pyzbar
+openpyxl
+# Orbbec Mini SDK (tuỳ chọn – cài nếu dùng SDK chính thức):
